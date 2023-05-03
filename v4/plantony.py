@@ -37,6 +37,7 @@ ambient_sounds = [
 radiation = random.choice(ambient_sounds)
 
 # create the seed
+timestamp = str(int(time.time()))
 word_categories = [
     {
         "category": "BEINGS",
@@ -181,6 +182,9 @@ with sr.Microphone() as source:
     print("I'm listening...")
     # Listen for speech and store it as audio data
     audio = r.listen(source)
+    # Save the audio data to a WAV file
+    with open(f"recordings/{timestamp}_recording.wav", "wb") as f:
+        f.write(audio.get_wav_data())
 
 # Use the recognizer to convert speech to text, playing some atmospherics while we wait
 try:
@@ -201,7 +205,6 @@ try:
 
     # Prepare to pass the transcript to the prompt
     generated_transcript = text
-    timestamp = str(int(time.time()))
     filename = f"transcripts/{timestamp}_transcript.txt"
 
     # Save the generated transcript to a file with epoch timestamp
