@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 import pyaudio
 import wave
 import time
@@ -18,8 +20,8 @@ import subprocess
 import threading
 
 # Set your API keys here
-openai.api_key = "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"
-eleven_labs_api_key = "56c063b7c2565ae63674330602fd53e4"
+const openai.api_key = process.env.OPENAI;
+const eleven_labs_api_key = process.env.ELEVEN;
 
 # Load the sounds
 beep_start = 'media/beep_start.wav'
@@ -239,9 +241,6 @@ sermon_text = response.choices[0].text
 # Now let's read it...
 
 voice = "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM"
-
-# Set your API key
-api_key = "yZ9OUSqs45j6A2GkseTx"
 
 # Read the text from the input file
 with open(filename, "r") as f:
