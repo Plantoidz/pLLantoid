@@ -1,0 +1,13 @@
+gtts==2.2.1
+playsound==1.2.2
+pyttsx3==2.90
+requests==2.26.0
+llama_cpp==1.0.0
+## portaudio
+## pyaudio
+## flac
+## pygame
+## nltk
+# Download the stop words list and the Brown corpus
+nltk.download('stopwords')
+nltk.download('brown')
