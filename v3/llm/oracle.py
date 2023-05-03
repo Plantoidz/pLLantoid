@@ -4,11 +4,11 @@ import subprocess
 import sys
 import pygame
 import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import time
-a0dc4956356cdad06aa0f0bf96f21a2906a2afc6
 import os
 from llama_cpp import Llama
+
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 # Initialize pygame mixer
 pygame.mixer.init()
@@ -44,7 +44,6 @@ prompt = f"### Instruction: You live in the future. Write a short poem about {ge
 
 llm = Llama(model_path="../models/ggml-alpaca-7b-q4.bin")
 output = llm(prompt, max_tokens=100, echo=True)
-a0dc4956356cdad06aa0f0bf96f21a2906a2afc6
 
 # Extract the response from the LLM
 generated_text = output['choices'][0]['text']
