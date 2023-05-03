@@ -54,9 +54,6 @@ print(f"Generated text: {generated_text}")
 # Extract the text after ### Response:
 generated_output = generated_text.split('### Response:')[1].strip()
 
-# Print just the response
-print(f"Cleaned up text: {generated_output}")  
-
 # Stop playing the ambient sound
 pygame.mixer.music.stop()
 
