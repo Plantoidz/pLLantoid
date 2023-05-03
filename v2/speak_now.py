@@ -61,8 +61,11 @@ try:
     # Wait for the first subprocess to complete before starting the second subprocess
     oracle_process.wait()
 
+    # Play the start beep
+    playsound.playsound(beep_start)
+
     # Call the TTS subprocess using subprocess
-    tts_process = subprocess.run(['python3', 'tts_script.py'])
+    tts_process = subprocess.run(['python3', 'tts_espeak.py'])
 
 except sr.UnknownValueError:
     print("I couldn't understand you.")

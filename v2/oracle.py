@@ -3,11 +3,14 @@ from gtts import gTTS
 import subprocess
 import sys
 import pygame
-
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 from llama_cpp import Llama
 
 # Initialize pygame mixer
 pygame.mixer.init()
+
+
 
 # List of ambient sounds
 ambient_sounds = [
@@ -31,10 +34,10 @@ pygame.mixer.music.play(loops=-1)
 generated_input = sys.argv[1]
 
 # Format the text as a string
-prompt = f"### Instruction: Write a short poem, including the words: {generated_input}. ### Response:"
+prompt = f"### Instruction: You live in the future. Write a short poem about {generated_input}. ### Response:"
 
 llm = Llama(model_path="./models/ggml-alpaca-7b-q4.bin")
-output = llm(prompt, max_tokens=100, echo=True)
+output = llm(prompt, max_tokens=60, echo=True)
 
 # Extract the response from the LLM
 generated_text = output['choices'][0]['text']
@@ -46,7 +49,7 @@ print(f"Generated text: {generated_text}")
 generated_output = generated_text.split('### Response:')[1].strip()
 
 # Print just the response
-# print(f"Cleaned up text: {generated_output}")  
+print(f"Cleaned up text: {generated_output}")  
 
 # Stop playing the ambient sound
 pygame.mixer.music.stop()
