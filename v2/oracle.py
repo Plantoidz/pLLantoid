@@ -2,8 +2,30 @@ import random
 from gtts import gTTS
 import subprocess
 import sys
+import pygame
 
 from llama_cpp import Llama
+
+# Initialize pygame mixer
+pygame.mixer.init()
+
+# List of ambient sounds
+ambient_sounds = [
+    'wav/ambient1.mp3',
+    'wav/ambient2.mp3',
+    'wav/ambient3.mp3',
+    'wav/ambient4.mp3',
+    'wav/ambient5.mp3'
+]
+
+# Choose a random ambient sound
+ambient_sound = random.choice(ambient_sounds)
+
+# Load the sound into pygame mixer
+pygame.mixer.music.load(ambient_sound)
+
+# Start playing the ambient sound
+pygame.mixer.music.play(loops=-1)
 
 # Get the generated_input variable from the command-line arguments
 generated_input = sys.argv[1]
@@ -12,7 +34,7 @@ generated_input = sys.argv[1]
 prompt = f"### Instruction: Write a short poem, including the words: {generated_input}. ### Response:"
 
 llm = Llama(model_path="./models/ggml-alpaca-7b-q4.bin")
-output = llm(prompt, max_tokens=32, echo=True)
+output = llm(prompt, max_tokens=100, echo=True)
 
 # Extract the response from the LLM
 generated_text = output['choices'][0]['text']
@@ -25,6 +47,9 @@ generated_output = generated_text.split('### Response:')[1].strip()
 
 # Print just the response
 # print(f"Cleaned up text: {generated_output}")  
+
+# Stop playing the ambient sound
+pygame.mixer.music.stop()
 
 # Write generated haiku to file
 with open('generated_output.txt', 'w') as f:

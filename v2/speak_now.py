@@ -11,15 +11,6 @@ import playsound
 # Initialize the recognizer
 r = sr.Recognizer()
 
-# Define the list of sound files
-ambient_sounds = [
-    'wav/ambient1.mp3',
-    'wav/ambient2.mp3',
-    'wav/ambient3.mp3',
-    'wav/ambient4.mp3',
-    'wav/ambient5.mp3'
-]
-
 # Load the start and stop beep sound files
 beep_start = 'wav/beep1.wav'
 beep_stop = 'wav/beep5.wav'
@@ -67,16 +58,8 @@ try:
     # Spawn the LLM subprocess and pass the generated_input variable as a command-line argument
     oracle_process = subprocess.Popen(['python3', 'oracle.py', generated_input])
 
-    # Play a random ambient sound while waiting for the first subprocess to complete
-    ambient_sound = random.choice(ambient_sounds)
-    sound_thread = threading.Thread(target=playsound.playsound, args=(ambient_sound,))
-    sound_thread.start()
-
     # Wait for the first subprocess to complete before starting the second subprocess
     oracle_process.wait()
-
-    # Stop playing the ambient sound
-    playsound.playsound(beep_stop)
 
     # Call the TTS subprocess using subprocess
     tts_process = subprocess.run(['python3', 'tts_script.py'])
