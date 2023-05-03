@@ -19,15 +19,7 @@ with open('./haikus/' + args.x, 'r') as f:
 
 # Define a list of URL strings
 url_list = [
-    "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM",
-    "https://api.elevenlabs.io/v1/text-to-speech/AZnzlk1XvdvUeBnXmlld",
-    "https://api.elevenlabs.io/v1/text-to-speech/EXAVITQu4vr4xnSDxMaL",
-    "https://api.elevenlabs.io/v1/text-to-speech/ErXwobaYiN019PkySvjV",
-    "https://api.elevenlabs.io/v1/text-to-speech/MF3mGyEYCl7XYWbV9V6O",
-    "https://api.elevenlabs.io/v1/text-to-speech/TxGEqnHWrfWFTfGW9XjX",
-    "https://api.elevenlabs.io/v1/text-to-speech/VR6AewLTigWG4xSOukaG",
-    "https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB",
-    "https://api.elevenlabs.io/v1/text-to-speech/yoZ06aMxZJJ28mfd3POQ",
+    "https://api.elevenlabs.io/v1/text-to-speech/GVujtglNiEdibm78n7Fw",
 ]
 
 CHUNK_SIZE = 1024
@@ -36,7 +28,7 @@ url = random.choice(url_list)  # Choose a URL string randomly
 headers = {
     "Accept": "audio/mpeg",
     "Content-Type": "application/json",
-    "xi-api-key": "56c063b7c2565ae63674330602fd53e4"
+    "xi-api-key": "yZ9OUSqs45j6A2GkseTx"
 }
 
 try:
