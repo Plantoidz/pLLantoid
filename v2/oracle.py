@@ -5,6 +5,9 @@ import sys
 import pygame
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+import time
+a0dc4956356cdad06aa0f0bf96f21a2906a2afc6
+import os
 from llama_cpp import Llama
 
 # Initialize pygame mixer
@@ -30,14 +33,18 @@ pygame.mixer.music.load(ambient_sound)
 # Start playing the ambient sound
 pygame.mixer.music.play(loops=-1)
 
+#get the file name from epoch
+timename = sys.argv[1]
+
 # Get the generated_input variable from the command-line arguments
-generated_input = sys.argv[1]
+generated_input = sys.argv[2]
 
 # Format the text as a string
 prompt = f"### Instruction: You live in the future. Write a short poem about {generated_input}. ### Response:"
 
-llm = Llama(model_path="./models/ggml-alpaca-7b-q4.bin")
-output = llm(prompt, max_tokens=60, echo=True)
+llm = Llama(model_path="../models/ggml-alpaca-7b-q4.bin")
+output = llm(prompt, max_tokens=100, echo=True)
+a0dc4956356cdad06aa0f0bf96f21a2906a2afc6
 
 # Extract the response from the LLM
 generated_text = output['choices'][0]['text']
@@ -55,7 +62,14 @@ print(f"Cleaned up text: {generated_output}")
 pygame.mixer.music.stop()
 
 # Write generated haiku to file
-with open('generated_output.txt', 'w') as f:
+
+cwd = os.getcwd() 
+fh = cwd + '/haikus/' + timename
+
+with open(fh, 'w') as f:
     f.write(generated_output)
+
+# with open('generated_output.txt', 'w') as f:
+#    f.write(generated_output)
 
 sys.exit()
