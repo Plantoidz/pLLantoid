@@ -3,6 +3,8 @@ from gtts import gTTS
 import subprocess
 import sys
 import pygame
+import time
+import os
 
 from llama_cpp import Llama
 
@@ -27,13 +29,16 @@ pygame.mixer.music.load(ambient_sound)
 # Start playing the ambient sound
 pygame.mixer.music.play(loops=-1)
 
+#get the file name from epoch
+timename = sys.argv[1]
+
 # Get the generated_input variable from the command-line arguments
-generated_input = sys.argv[1]
+generated_input = sys.argv[2]
 
 # Format the text as a string
 prompt = f"### Instruction: Write a short poem, including the words: {generated_input}. ### Response:"
 
-llm = Llama(model_path="./models/ggml-alpaca-7b-q4.bin")
+llm = Llama(model_path="../models/ggml-alpaca-7b-q4.bin")
 output = llm(prompt, max_tokens=100, echo=True)
 
 # Extract the response from the LLM
@@ -52,7 +57,14 @@ generated_output = generated_text.split('### Response:')[1].strip()
 pygame.mixer.music.stop()
 
 # Write generated haiku to file
-with open('generated_output.txt', 'w') as f:
+
+cwd = os.getcwd() 
+fh = cwd + '/haikus/' + timename
+
+with open(fh, 'w') as f:
     f.write(generated_output)
+
+# with open('generated_output.txt', 'w') as f:
+#    f.write(generated_output)
 
 sys.exit()

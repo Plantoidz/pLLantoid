@@ -3,8 +3,18 @@ import requests
 import pyttsx3
 from playsound import playsound
 
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('x', type=str)
+
+args = parser.parse_args()
+
+
+
+
 # Read text from file
-with open('generated_output.txt', 'r') as f:
+with open('./haikus/' + args.x, 'r') as f:
     text = f.read().strip()
 
 # Define a list of URL strings
@@ -36,10 +46,10 @@ try:
         # Save remote TTS output to variable
         remote_output = response.content
         # Save remote TTS output to file
-        with open('output-remote.mp3', 'wb') as f:
+        with open('./haikus/mp3s/' + args.x + '.mp3', 'wb') as f:
             f.write(remote_output)
         # Play remote TTS output
-        playsound('output-remote.mp3')
+        playsound('./haikus/mp3s/' + args.x + '.mp3')
     else:
         raise Exception(f"Remote TTS failed with status code {response.status_code}")
 except Exception as e:

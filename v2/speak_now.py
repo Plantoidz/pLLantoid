@@ -6,6 +6,7 @@ import speech_recognition as sr
 import subprocess
 import threading
 import playsound
+import time
 
 
 # Initialize the recognizer
@@ -55,14 +56,17 @@ try:
     # Print the output
     print("I resonate with these concepts: " + generated_input)
 
+
+    timename = str(int(time.time()))
+
     # Spawn the LLM subprocess and pass the generated_input variable as a command-line argument
-    oracle_process = subprocess.Popen(['python3', 'oracle.py', generated_input])
+    oracle_process = subprocess.Popen(['python3', 'oracle.py', timename, generated_input])
 
     # Wait for the first subprocess to complete before starting the second subprocess
     oracle_process.wait()
 
     # Call the TTS subprocess using subprocess
-    tts_process = subprocess.run(['python3', 'tts_script.py'])
+    tts_process = subprocess.run(['python3', 'tts_script.py', timename])
 
 except sr.UnknownValueError:
     print("I couldn't understand you.")
