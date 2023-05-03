@@ -107,7 +107,9 @@ while True:
 
         fh = random.choice(dir_list);
 
-        os.system("mpg123 ~/LLMs/PLLantoid/haikus/mp3s/" + fh)
+#        os.system("mpg123 ~/LLMs/PLLantoid/haikus/mp3s/" + fh)
+
+        os.system("python3 ~/LLMs/PLLantoid/v2/speak_now.py")
 
     # os.system("python3 ~//LLMs/PLLantoid/haiku.py")
 
