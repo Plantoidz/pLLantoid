@@ -1,5 +1,4 @@
-require('dotenv').config();
-
+from dotenv import load_dotenv
 import pyaudio
 import wave
 import time
@@ -19,9 +18,12 @@ import speech_recognition as sr
 import subprocess
 import threading
 
-# Set your API keys here
-const openai.api_key = process.env.OPENAI;
-const eleven_labs_api_key = process.env.ELEVEN;
+# Load environment variables from .env file
+load_dotenv()
+
+# Access environment variables
+openai.api_key = os.environ.get("OPENAI")
+eleven_labs_api_key = os.environ.get("ELEVEN")
 
 # Load the sounds
 beep_start = 'media/beep_start.wav'
