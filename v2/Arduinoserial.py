@@ -2,6 +2,7 @@ import serial
 import time
 import os
 import random
+import regex_spm
 
 startMarker = '<'
 endMarker = '>'
@@ -84,12 +85,14 @@ def waitForArduino():
     # the program
 
 
+
+waves = [9] * 10;
+
 setupSerial(9600, "/dev/cu.usbserial-AK08LLRZ")
 count = 0
 prevTime = time.time()
 
-sendToArduino("food");
-
+sendToArduino("awake");
 
 
 file = open("datapoints.txt", "w")
@@ -99,17 +102,49 @@ while True:
     # check for a reply
      arduinoReply = recvLikeArduino()
      if not (arduinoReply == 'XXX'):
-        print ("Time %s  Reply %s" %(time.time(), arduinoReply))
-        file.write(arduinoReply + "\n")
 
-        path = "/Users/ya/LLMs/PLLantoid/haikus/mp3s/"
-        dir_list = os.listdir(path)
+      #  print(arduinoReply)
 
-        fh = random.choice(dir_list);
+        match regex_spm.fullmatch_in(arduinoReply):
+            case r"Waving: (\d)" as m:
 
-#        os.system("mpg123 ~/LLMs/PLLantoid/haikus/mp3s/" + fh)
+                        print ("Waved at " + m[1]);
 
-        os.system("python3 ~/LLMs/PLLantoid/v2/speak_now.py")
+                        if(not waves[int(m[1])]):
+
+                            sendToArduino("asleep")
+                            sendToArduino("fire")
+
+                            path = "/Users/ya/LLMs/PLLantoid/haikus/mp3s/"
+                            dir_list = os.listdir(path)
+                            fh = random.choice(dir_list);
+                            os.system("mpg123 ~/LLMs/PLLantoid/haikus/mp3s/" + fh)
+
+                            sendToArduino("fire")
+                            sendToArduino("awake")
+
+                            waves[int(m[1])] = 1;
+
+                        else:
+
+                            waves[int(m[1])] = 0;
+
+
+            case _:
+            
+                print ("Time %s  Reply %s" %(time.time(), arduinoReply))
+                file.write(arduinoReply + "\n")
+
+                sendToArduino("asleep")
+                sendToArduino("fire")
+
+                os.system("python3 ~/LLMs/PLLantoid/v2/speak_now.py");
+
+                sendToArduino("fire")
+                sendToArduino("awake")
+
+
+
 
     # os.system("python3 ~//LLMs/PLLantoid/haiku.py")
 
