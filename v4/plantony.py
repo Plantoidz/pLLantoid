@@ -26,7 +26,7 @@ openai.api_key = os.environ.get("OPENAI")
 eleven_labs_api_key = os.environ.get("ELEVEN")
 
 # Load the sounds
-beep_start = 'media/beep_start.wav'
+beep_start = 'media/beep_start.mp3'
 beep_stop = 'media/beep_stop.wav'
 ambient_sounds = [
     'media/ambient1.mp3',
@@ -245,7 +245,7 @@ sermon_text = response.choices[0].text
 
 # Now let's read it...
 
-voice = "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM"
+voice = "https://api.elevenlabs.io/v1/text-to-speech/o7lPjDgzlF8ZloHzVPeK"
 
 # Read the text from the input file
 with open(filename, "r") as f:
