@@ -66,7 +66,7 @@ try:
     oracle_process.wait()
 
     # Call the TTS subprocess using subprocess
-    tts_process = subprocess.run(['python3', 'tts_script.py', timename])
+    tts_process = subprocess.run(['python3', 'tts_local_espeak.py', timename])
 
 except sr.UnknownValueError:
     print("I couldn't understand you.")
