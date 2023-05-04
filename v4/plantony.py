@@ -28,13 +28,22 @@ eleven_labs_api_key = os.environ.get("ELEVEN")
 # Load the sounds
 beep_start = 'media/beep_start.mp3'
 beep_stop = 'media/beep_stop.wav'
+reflection = 'media/initiation.mp3'
+cleanse = 'media/cleanse.mp3'
 ambient_sounds = [
     'media/ambient1.mp3',
     'media/ambient2.mp3',
     'media/ambient3.mp3',
     'media/ambient4.mp3'
 ]
+acknowledgement_sounds = [
+    'media/acknowledgement1.mp3',
+    'media/acknowledgement2.mp3',
+    'media/acknowledgement3.mp3',
+    'media/acknowledgement4.mp3'
+]
 radiation = random.choice(ambient_sounds)
+acknowledgement = random.choice(acknowledgement_sounds)
 
 # create the seed
 timestamp = str(int(time.time()))
@@ -176,7 +185,8 @@ print("My seed words are: " + selected_words_string)
 r = sr.Recognizer()
 
 # Set the microphone as the source
-playsound(beep_start)
+time.sleep(1)  # wait for 1 second
+playsound(reflection)
 with sr.Microphone() as source:
 
     print("I'm listening...")
@@ -188,7 +198,6 @@ with sr.Microphone() as source:
 
 # Use the recognizer to convert speech to text, playing some atmospherics while we wait
 try:
-    playsound(beep_stop)
     def ambient_background(radiation, stop_event):
         while not stop_event.is_set():
             playsound(radiation)
@@ -200,6 +209,7 @@ try:
     sound_thread.start()
 
     # Recognize the speech input using Google Speech Recognition
+    playsound(acknowledgement)
     text = r.recognize_google(audio)
     print("I heard: " + text)
 
@@ -270,10 +280,11 @@ if response.status_code == 200:
         f.write(response.content)
         print(f"Sermon saved to sermons/{timestamp}_sermon.mp3")
         
-    # Play the audio file
+    # Play the audio file and cleanse
     print(sermon_text)
     playsound(filename)
-    playsound(beep_stop)
+    time.sleep(2)  # wait for 2 seconds
+    playsound(cleanse)
 
 # End the script
 exit()
