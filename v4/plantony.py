@@ -272,9 +272,9 @@ headers = {
 
     # Request TTS from remote API
 response = requests.post(url, json={"text": text, "voice_settings": {"stability": 0, "similarity_boost": 0}}, headers=headers)
+print(response.status_code)
 if response.status_code == 200:
     # Save remote TTS output to a local audio file with an epoch timestamp
-    timestamp = int(time.time())
     filename = f"sermons/{timestamp}_sermon.mp3"
     with open(filename, "wb") as f:
         f.write(response.content)

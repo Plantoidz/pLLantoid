@@ -1,0 +1,48 @@
+/* apply a font family and size to the poem */
+body {
+ font-family: Georgia, Times, serif;
+  font-size: 1.2rem;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: rgb( 0, 0, 0 );
+}
+
+#animation {
+  display: block;
+  margin: 0 auto;
+}
+
+/* style the poem prompt */
+h1 {
+  font-size: 1rem;
+  color: mediumaquamarine;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+/* style the poem epoch */
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* style the poem lines */
+p {
+  margin-bottom: 1rem;
+  opacity: 1;
+  color: grey;
+}
+
+/* apply a fade-in effect to the poem lines */
+p.fade-in {
+  animation: fade-in 1s forwards;
+}
+
+/* define the fade-in animation */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

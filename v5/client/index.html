@@ -1,0 +1,72 @@
+<button id="record-btn">Record</button>
+<div id="recording-status"></div>
+<script>
+  const recordBtn = document.getElementById('record-btn');
+  const recordingStatus = document.getElementById('recording-status');
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  const audioContext = new AudioContext();
+  let mediaRecorder;
+
+  recordBtn.addEventListener('click', () => {
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({audio: true})
+        .then(stream => {
+          recordingStatus.classList.add('active');
+          document.body.style.backgroundColor = 'red'; // Change background color to red
+          mediaRecorder = new MediaRecorder(stream);
+          mediaRecorder.start();
+
+          const analyser = audioContext.createAnalyser();
+          const source = audioContext.createMediaStreamSource(stream);
+          source.connect(analyser);
+
+          const bufferLength = analyser.frequencyBinCount;
+          const dataArray = new Uint8Array(bufferLength);
+
+          let isRecording = false;
+          let silenceTimeout = null;
+          const silenceThreshold = 10;
+
+          mediaRecorder.ondataavailable = e => {
+            if (e.data.size > 0) {
+              const formData = new FormData();
+              formData.append('audio', e.data, 'recording.wav');
+              fetch('/upload', {
+                method: 'POST',
+                body: formData,
+              });
+            }
+          };
+
+          function detectSpeech() {
+            analyser.getByteTimeDomainData(dataArray);
+            const rms = Math.sqrt(Array.from(dataArray).reduce((acc, val) => acc + Math.pow(val, 2)) / bufferLength);
+            if (rms > silenceThreshold) {
+              if (!isRecording) {
+                isRecording = true;
+                mediaRecorder.start();
+                document.body.style.backgroundColor = 'red'; // Change background color to red
+              }
+              clearTimeout(silenceTimeout);
+            } else {
+              if (isRecording) {
+                silenceTimeout = setTimeout(() => {
+                  isRecording = false;
+                  mediaRecorder.stop();
+                  document.body.style.backgroundColor = ''; // Reset background color
+                }, 5000); // stop recording after 5 seconds of silence
+              }
+            }
+            requestAnimationFrame(detectSpeech);
+          }
+
+          requestAnimationFrame(detectSpeech);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    } else {
+      console.error('getUserMedia is not supported');
+    }
+  });
+</script>

@@ -1,0 +1,7 @@
+body {
+  background: rgb( 0, 0, 0 );
+}
+#animation {
+  display: block;
+  margin: 0 auto;
+}
