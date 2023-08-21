@@ -24,15 +24,15 @@ Welcome to **PLLantoid** - the pinnacle of Cybernetic Embodied Synesthesia (CES)
 To install and set up PLLantoid:
 
 1. Clone the repository:
-git clone LINK_TO_REPO
+git clone https://github.com/benrito/pLLantoid
 
 
 2. Navigate to the cloned directory:
-cd PATH_TO_REPO
+cd /pLLantoid
 
 
 3. Create a working directory:
-mkdir PLLantoid/working
+mkdir pLLantoid/working
 
 
 4. Create a `.env` file in the root directory and add your API keys:
@@ -56,7 +56,7 @@ python3 util/config_character.py
 python3 util/config_modes.py
 
 
-3. Launch a PLLantoid test mode, such as chatter.py or conversation.py. The functions in embodiment.py will handle characters, audio reognition, prompt maangement, and audio synthesis to assigned audio channels, allowing you to converse and interact with your AI-generated characters.
+3. Launch a PLLantoid test mode, such as chatter.py or conversation.py. The functions in embodiment.py will handle characters, audio recognition, prompt manangement, and audio synthesis routed to assigned audio channels, allowing you to converse and interact with your AI-generated characters.
 
 4. To view or edit character profiles, navigate to:
 characters/character.json
