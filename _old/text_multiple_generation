@@ -1,0 +1,48 @@
+import aiohttp
+import asyncio
+import json
+import time
+
+# Save the affirmations to a local file with an epoch timestamp
+affirmations = response.choices[0].text
+filename = f"analysis/{int(time.time())}_affirmations.json"
+with open(filename, "w") as f:
+    json.dump(affirmations, f)
+print(f"Output saved to {filename}")
+
+# Voice API endpoint
+voice = "https://api.elevenlabs.io/v1/text-to-speech/o7lPjDgzlF8ZloHzVPeK"
+headers = {
+    "Accept": "audio/mpeg",
+    "Content-Type": "application/json",
+    "xi-api-key": eleven_labs_api_key
+}
+
+# Read the text from the input file
+with open(filename, "r") as f:
+    affirmations = json.load(f)
+
+# split the affirmations into 5 chunks
+chunks = [affirmations[i:i + 5] for i in range(0, len(affirmations), 5)]
+
+async def generate_audio(chunk, chunk_num):
+    url = (voice)
+
+    # Request TTS from remote API
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, json={"text": chunk, "voice_settings": {"stability": 0, "similarity_boost": 0}}, headers=headers) as response:
+            print(response.status)
+            if response.status == 200:
+                # Save remote TTS output to a local audio file with an epoch timestamp
+                timestamp = int(time.time())
+                filename = f"affirmations/{timestamp}_sermon_{chunk_num}.mp3"
+                with open(filename, "wb") as f:
+                    f.write(await response.read())
+                    print(f"Sermon saved to {filename}")
+
+# start a new event loop
+loop = asyncio.get_event_loop()
+
+# start the tasks
+tasks = [generate_audio(chunk, chunk_num) for chunk_num, chunk in enumerate(chunks)]
+loop.run_until_complete(asyncio.gather(*tasks))

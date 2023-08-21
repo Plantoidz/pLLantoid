@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="poem.css">
+  <style>
+
+    #recording-status {
+      display: none;
+      background-color: red;
+      color: white;
+      padding: 5px;
+      border-radius: 5px;
+    }
+    #recording-status.active {
+      display: inline-block;
+    }
+  </style>
+<script src>
+  (function(){
+
+  var canvas = document.getElementById( 'animation' ),
+    c = canvas.getContext( '2d' ),
+    i = 0,
+    rowOne = [],
+    rowTwo = [],
+    rowThree = [],
+    length = canvas.width * 0.4,
+    origin = [ canvas.width / 2, canvas.height / 2 ],
+    angle = 90,
+    loop;
+
+  function Circle( args ) {
+    this.position  = [ 0, 0 ];
+    this.angle     = 30;
+    this.speed     = 1;
+    this.offset    = 1;
+    this.length    = 100;
+    this.size      = 5;
+    this.color     = '#fff';
+    this.direction = 'grow';
+
+    if ( 'undefined' !== typeof args.position )
+      this.position = args.position;
+    if ( 'undefined' !== typeof args.angle )
+      this.angle = args.angle;
+    if ( 'undefined' !== typeof args.speed )
+      this.speed = args.speed;
+    if ( 'undefined' !== typeof args.length )
+      this.length = args.length;
+    if ( 'undefined' !== typeof args.size )
+      this.size = args.size;
+    if ( 'undefined' !== typeof args.color )
+      this.color = args.color;
+    if ( 'undefined' !== typeof args.offset ) {
+      this.offset = args.offset;
+      this.length = canvas.width * this.offset * 0.03
+    }
+  }
+
+  Circle.prototype.render = function() {
+    this.move();
+    this.draw();
+  }
+
+  Circle.prototype.draw = function() {
+    c.fillStyle = this.color;
+    c.beginPath();
+    c.arc( this.position[0], this.position[1], ( this.size / 2 ), 0, Math.PI * 2, true );
+    c.closePath();
+    c.fill();
+  }
+
+  Circle.prototype.move = function() {
+    this.angle = ( this.angle < 360 ) ? this.angle + this.speed : 0;
+
+    if ( 'grow' == this.direction ) {
+      this.length++;
+      this.direction = ( 150 >= this.length ) ? 'grow' : 'shrink';
+    } else {
+      this.length--;
+      this.direction = ( 50 <= this.length ) ? 'shrink' : 'grow';
+    }
+
+    this.position[0] = this.length * Math.sin( this.angle * ( Math.PI / 180 ) );
+    this.position[1] = this.length * Math.cos( this.angle * ( Math.PI / 180 ) );
+
+    this.position[0] = this.position[0] + origin[0];
+    this.position[1] = this.position[1] + origin[1];
+  }
+
+  for ( i = 1; i < 10; i++ ) {
+    var offset = 1;
+    rowOne.push( new Circle( {
+      angle: 0,
+      offset: i
+    } ) );
+    rowTwo.push( new Circle( {
+      angle: 120,
+      offset: i
+    } ) );
+    rowThree.push( new Circle( {
+      angle: 240,
+      offset: i
+    } ) );
+  }
+
+  function render() {
+    c.fillStyle = 'rgba( 0, 0, 0, 0.025 )';
+    c.fillRect( 0, 0, canvas.width, canvas.height );
+    for ( i = 0; i < 9; i++ ) {
+      rowOne[i].render();
+      rowTwo[i].render();
+      rowThree[i].render();
+    }
+  }
+
+  (function animate() {
+    render();
+    loop = setTimeout( animate, 40 );
+  })();
+
+})();
+</script>
+</head>
+<body>
+  <!-- <canvas id="canvas" width="100%" height="100%"/> -->
+<div class="bg"></div>
+<div class="content">   
+    <div class="circle no1">
+      <span class="dot"></span>
+      <span class="dot deg90"></span>
+    </div>  
+    <div class="circle no2">
+      <span class="dot"></span>
+      <span class="dot deg45"></span>
+      <span class="dot deg90"></span>
+      <span class="dot deg135"></span>
+    </div>
+    <div class="circle no3">
+      <span class="dot"></span>
+      <span class="dot deg30"></span>
+      <span class="dot deg60"></span>
+      <span class="dot deg90"></span>
+      <span class="dot deg120"></span>
+      <span class="dot deg150"></span>
+    </div>
+    <div class="circle no4">
+      <span class="dot"></span>
+      <span class="dot deg22"></span>
+      <span class="dot deg45"></span>
+      <span class="dot deg67"></span>
+      <span class="dot deg90"></span>
+      <span class="dot deg112"></span>
+      <span class="dot deg135"></span>
+      <span class="dot deg157"></span>    
+    </div>
+    <div class="circle no5">
+      <span class="dot"></span>
+      <span class="dot deg18"></span>
+      <span class="dot deg36"></span>
+      <span class="dot deg54"></span>
+      <span class="dot deg72"></span>
+      <span class="dot deg90"></span>
+      <span class="dot deg108"></span>
+      <span class="dot deg126"></span>
+      <span class="dot deg144"></span>
+      <span class="dot deg162"></span>
+    </div>
+    <div class="circle no6">
+      <span class="dot"></span>
+      <span class="dot deg15"></span>
+      <span class="dot deg30"></span>
+      <span class="dot deg45"></span>
+      <span class="dot deg60"></span>
+      <span class="dot deg75"></span>
+      <span class="dot deg90"></span>
+      <span class="dot deg105"></span>
+      <span class="dot deg120"></span>
+      <span class="dot deg135"></span>
+      <span class="dot deg150"></span>
+      <span class="dot deg165"></span>
+    </div>
+    <div class="circle no7">
+      <span class="dot"></span>
+      <span class="dot deg12"></span>
+      <span class="dot deg25"></span>
+      <span class="dot deg38"></span>
+      <span class="dot deg51"></span>
+      <span class="dot deg64"></span>
+      <span class="dot deg77"></span>
+      <span class="dot deg90"></span>
+      <span class="dot deg102"></span>
+      <span class="dot deg115"></span>
+      <span class="dot deg128"></span>
+      <span class="dot deg141"></span>
+      <span class="dot deg154"></span>
+      <span class="dot deg167"></span>
+    </div>
+    <div class="circle no8">
+      <span class="dot"></span>
+      <span class="dot deg11"></span>     
+      <span class="dot deg22"></span>
+      <span class="dot deg33"></span>
+      <span class="dot deg45"></span>
+      <span class="dot deg56"></span>
+      <span class="dot deg67"></span>
+      <span class="dot deg78"></span>
+      <span class="dot deg90"></span>
+      <span class="dot deg101"></span>
+      <span class="dot deg112"></span>
+      <span class="dot deg123"></span>
+      <span class="dot deg135"></span>
+      <span class="dot deg146"></span>
+      <span class="dot deg157"></span>
+      <span class="dot deg168"></span>
+    </div>
+    <div class="circle no9">
+      <span class="dot"></span>
+      <span class="dot deg10"></span>     
+      <span class="dot deg20"></span>
+      <span class="dot deg30"></span>
+      <span class="dot deg40"></span>
+      <span class="dot deg50"></span>
+      <span class="dot deg60"></span>
+      <span class="dot deg70"></span>
+      <span class="dot deg80"></span>
+      <span class="dot deg90"></span>
+      <span class="dot deg100"></span>
+      <span class="dot deg110"></span>
+      <span class="dot deg120"></span>
+      <span class="dot deg130"></span>
+      <span class="dot deg140"></span>
+      <span class="dot deg150"></span>
+      <span class="dot deg160"></span>
+      <span class="dot deg170"></span>
+    </div>
+    <div class="circle no10"></div>
+</div>
+
+  <button id="record-btn"></button>
+  <span id="recording-status">Recording...</span>
+  
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="recordrtc.js"></script>
+  <script>
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      const recordBtn = document.getElementById('record-btn');
+      const recordingStatus = document.getElementById('recording-status');
+      recordBtn.addEventListener('click', async () => {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+          const recorder = new RecordRTC(stream, {type: 'audio'});
+          recorder.startRecording();
+          recordingStatus.classList.add('active');
+          setTimeout(async () => {
+            await recorder.stopRecording();
+            recordingStatus.classList.remove('active');
+            const blob = recorder.getBlob();
+            const formData = new FormData();
+            formData.append('audio', blob, 'recording.wav');
+            const response = await fetch('/upload', {
+              method: 'POST',
+              body: formData,
+            });
+            console.log(response);
+          }, 5000); // record for 5 seconds
+        } catch (error) {
+          console.error(error);
+        }
+      });
+    } else {
+      console.error('getUserMedia is not supported');
+    }
+  </script>
+</body>
+</html>

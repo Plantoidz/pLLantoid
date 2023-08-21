@@ -1,0 +1,17 @@
+python-dotenv
+pyaudio
+wave
+openai
+requests
+json
+playsound
+pyaudio
+pydub
+tempfile
+os
+sounddevice
+numpy
+random
+nltk
+speechrecognition
+scipy

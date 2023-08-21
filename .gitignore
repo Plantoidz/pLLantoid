@@ -1,6 +1,10 @@
-**/.DS_Store
-**/.env
-/models/*
-v4/.DS_Store
-v4/.env
-v4/.DS_Store
+# Ignore .env files
+*.env
+
+# Ignore .DS_Store
+.DS_Store
+
+# Ignore the /working directory and pycache
+/working/
+__pycache__
+ *.pyc

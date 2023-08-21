@@ -1,0 +1,13 @@
+{
+    "Shadow_Bathing": {
+        "current_mode": "shadow_bathing",
+        "sequences": "",
+        "system_message": "",
+        "reasoning_prompt1": "I’m going to make a confession. What might someone say to absolve my guilt? Here it goes:",
+        "reasoning_prompt1_msg": "Absolutions:",
+        "responding_prompt1": "I’m going to make a confession. Please respond with eight one-liners that judge me very harshly. Here it goes:",
+        "reasoning_prompt2": "",
+        "responding_prompt2": "",
+        "description": "Turn shame into relief."
+    }
+}

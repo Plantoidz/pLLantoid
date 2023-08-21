@@ -1,0 +1,31 @@
+{
+    "Affirmations": {
+        "current_mode": "",
+        "sequences": "",
+        "system_message": "",
+        "reasoning_prompt1": "",
+        "reasoning_prompt1_msg": "",
+        "responding_prompt1": "",
+        "responding_prompt2": "",
+        "description": ""
+    },
+    "sounds": {
+        "beep_start": "",
+        "beep_stop": "",
+        "tellme": "",
+        "askme": "",
+        "cleanse": "",
+        "ambient_sounds": [
+            "",
+            "",
+            "",
+            ""
+        ],
+        "acknowledgement_sounds": [
+            "",
+            "",
+            "",
+            ""
+        ]
+    }
+}

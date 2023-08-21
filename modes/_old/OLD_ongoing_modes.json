@@ -1,0 +1,12 @@
+{
+    "MODES": {
+        "Plantony": {
+            "current_mode": "plantony",
+            "description": "Ongoing conversation with a cybernetic being",
+            "reasoning_prompt1": "Why might God have punished me for the sins of my parents? Be as funny as possible. Here's some context",
+            "reasoning_prompt1_msg": "God punished me because:",
+            "collective_prompt1": "Write eight one-liners commenting on why God punished me. Here's some context",
+            "responding_prompt1": "Write a one-liner commenting on why God punished me. Here's some context"
+        }
+    }
+}

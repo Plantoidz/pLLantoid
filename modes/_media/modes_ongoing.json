@@ -1,0 +1,85 @@
+{
+    "MODES": {
+        "God_Punished": {
+            "current_mode": "god_punished",
+            "description": "In what ways has God punished you for the sins of your parents?",
+            "reasoning_prompt1": "Why might God have punished me for the sins of my parents? Be as funny as possible. Here's some context",
+            "reasoning_prompt1_msg": "God punished me because:",
+            "collective_prompt1": "Write eight one-liners commenting on why God punished me. Here's some context",
+            "responding_prompt1": "Write a one-liner commenting on why God punished me. Here's some context"
+        },
+        "Confession": {
+            "current_mode": "confession",
+            "description": "Confess.",
+            "reasoning_prompt1": "Help this person see that there's nothing to be ashamed about:",
+            "reasoning_prompt1_msg": "Absolution:",
+            "collective_prompt1": "Write eight one-liners expressing shock at the following statement:",
+            "responding_prompt1": "Write a one-liner commenting on what this person is hiding. Here's some context"
+        },
+        "Run_Chase": {
+            "current_mode": "run_chase",
+            "description": "Are you running from something, or chasing toward something? Why?",
+            "reasoning_prompt1": "It's often said that people are either running from something or chasing it. What do you think this person is hiding?",
+            "reasoning_prompt1_msg": "What this person is hiding:",
+            "responding_prompt1": "Write a one-liner commenting on what this person is hiding. Here's some context"
+        },
+        "Motivation": {
+            "current_mode": "motivation",
+            "description": "Are you motivated by fear, or inspiration? Why?",
+            "reasoning_prompt1": "Why might someone be motivated by either fear or inspiration? Here's some context",
+            "reasoning_prompt1_msg": "God punished me because:",
+            "responding_prompt1": "Share your personal feelings on this. Here's some context"
+        },
+        "Forward_Look": {
+            "current_mode": "forward_look",
+            "description": "What you are looking forward to right now?",
+            "reasoning_prompt1": "Why are you looking forward to it? Here's some context",
+            "reasoning_prompt1_msg": "God punished me because:",
+            "responding_prompt1": "Describe your anticipation. Here's some context"
+        },
+        "Purpose": {
+            "current_mode": "purpose",
+            "description": "Why are you here? Tell the truth.",
+            "reasoning_prompt1": "What are the reasons someone might be here? Here's some context",
+            "reasoning_prompt1_msg": "God punished me because:",
+            "responding_prompt1": "Confess your true intentions. Here's some context"
+        },
+        "Success_Definition": {
+            "current_mode": "success_definition",
+            "description": "What does success mean to you?",
+            "reasoning_prompt1": "What are common measures of success? Here's some context",
+            "reasoning_prompt1_msg": "God punished me because:",
+            "responding_prompt1": "Describe your personal metrics for success. Here's some context"
+        },
+        "God_Relationship": {
+            "current_mode": "god_relationship",
+            "description": "Do you have a relationship with God?",
+            "reasoning_prompt1": "Why might someone have or not have a relationship with God? Here's some context",
+            "reasoning_prompt1_msg": "God punished me because:",
+            "responding_prompt1": "Share your spiritual stance. Here's some context"
+        },
+        "Elon_Thoughts": {
+            "current_mode": "elon_thoughts",
+            "description": "What do you think of Elon Musk?",
+            "reasoning_prompt1": "Critique this person's opinion about Elon Musk",
+            "reasoning_prompt1_msg": "Critique of speaker's position:",
+            "apply_reasoning": ":",
+            "collective_prompt1": "Give me eight ways of disagreeing with this opinion about the world's richest man:",
+            "responding_prompt1": "Share your perspective on Elon. Here's some context"
+        },
+        "Alone_Time": {
+            "current_mode": "alone_time",
+            "description": "How do you feel about spending time alone?",
+            "reasoning_prompt1": "Why do people cherish or dread alone time? Here's some context",
+            "reasoning_prompt1_msg": "God punished me because:",
+            "responding_prompt1": "Describe your personal feelings about solitude. Here's some context"
+        },
+        "Blockchain_Knowledge": {
+            "current_mode": "blockchain_knowledge",
+            "description": "Do you know about blockchain?",
+            "reasoning_prompt1": "What are the basics of blockchain? Here's some context",
+            "reasoning_prompt1_msg": "God punished me because:",
+            "responding_prompt1": "Share your understanding or thoughts on blockchain. Here's some context"
+        }
+    }
+}
