@@ -25,25 +25,13 @@ from nltk.probability import FreqDist
 import speech_recognition as sr
 import subprocess
 import threading
-# from scipy.io import wavfile
+#from scipy.io import wavfile
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Lock
 import episode_manager
-import arduino_serial
-import serial.tools.list_ports
-
-# set up serial communication
-ports = serial.tools.list_ports.comports()
-porto = "";
-for port, desc, hwid in sorted(ports):
-        print("{}: {} [{}]".format(port, desc, hwid))
-        if(desc == "USB Serial"): porto = port
-
-if(porto):
-	arduino_serial.setupSerial(115200, porto)
-else:
-	print("no serial port available.. exiting")
-	exit()
+import audioop
+import random
+from collections import deque
 
 
 # Load environment variables from .env file
@@ -146,7 +134,6 @@ def speaktext(text):
         with open(unique_filename, "wb") as f:
             f.write(response.content)
 
-        arduino_serial.sendToArduino("speaking")
         # Play the audio file
         playsound(unique_filename)
 
@@ -200,8 +187,7 @@ def gptmagic(turns, prompt):
     filename = f"working/plantony/{timestamp}.txt"
     with open(filename, "w") as f:
         f.write(prompt)
-
-    arduino_serial.sendToArduino("speaking") 
+    
     speaktext(messages)
 
 def build_transcript(turns) -> str:
@@ -237,8 +223,8 @@ def activate_tony(r):
     exit_loop = False
     error_counter = 0  # Initialize the error counter
 
-    with sr.Microphone() as source:
-        while not exit_loop:
+#    with sr.Microphone() as source:
+    while not exit_loop:
 
             if(len(turns) > episode.max_turns):
                     exit_loop = True
@@ -247,37 +233,34 @@ def activate_tony(r):
                         exit()
 
             # Begin transcribing microphone audio stream
-            r.adjust_for_ambient_noise(source)
-            
-            arduino_serial.sendToArduino("listening")
-            audio = r.listen(source, 100, 10)
+    #        r.adjust_for_ambient_noise(source)
+    #        audio = r.listen(source, 100, 10)
+            audio = listenSpeech()
+
             time.sleep(1)
             playsound(acknowledgement)
             text = ""
 
-            arduino_serial.sendToArduino("thinking")
+            text = recoSpeech(audio)
 
-            try:
-                # Recognize the speech input using Google Speech Recognition
-                text = r.recognize_google(audio)
+            #try:
+            #    # Recognize the speech input using Google Speech Recognition
+            #    text = r.recognize_google(audio)
 
-            except sr.UnknownValueError:
-                print("Google Speech Recognition could not understand audio")
-                arduino_serial.sendToArduino("speaking")
-                playsound(fail)
-                error_counter += 1  # Increment the error counter
+            #except sr.UnknownValueError:
+            #    print("Google Speech Recognition could not understand audio")
+            #    playsound(fail)
+            #    error_counter += 1  # Increment the error counter
 
-            except sr.RequestError as e:
-                print("Could not request results from Google Speech Recognition service; {0}".format(e))
-                arduino_serial.sendToArduino("speaking")
-                playsound(problem)
-                error_counter += 1  # Increment the error counter
+            #except sr.RequestError as e:
+            #    print("Could not request results from Google Speech Recognition service; {0}".format(e))
+            #    playsound(problem)
+            #    error_counter += 1  # Increment the error counter
 
             # Check if the error counter has reached 3 and exit if it has
-            if error_counter >= 3:
-                print("Reached maximum number of errors. Exiting.")
-                arduino_serial.sendToArduino("awake")
-                break
+            #if error_counter >= 3:
+            #    print("Reached maximum number of errors. Exiting.")
+            #    break
 
             if(text):
                 print("I heard: " + text)
@@ -296,30 +279,43 @@ def activate_tony(r):
 def wait_for_wake_word(r):
     """Wait for the wake word to be spoken."""
     logging.info("Waiting for wake word...")
-    wake_phrases = ["Ready", "Reading", "Red tea", "Rudy", "Ton", "Tone", "e", "Activate", "Rody", "Leaving", "Heavy", "Tony", "Danny", "Wake", "Ruddy"]
+    wake_phrases = ["Ready", "Reading", "Red tea", "Rudy", "Ton", "Tone", "Listening", "Activate", "Rody", "Leaving", "Heavy", "Tony", "Danny", "Wake", "Ruddy"]
     
-    with sr.Microphone() as source:
+#    with sr.Microphone() as source:
 
-        while True:
-
-            arduino_serial.sendToArduino("awake")
+    while True:
 
             print("I'm listening...")
             # Listen for speech and store it as audio data
-            r.adjust_for_ambient_noise(source)
-            audio = r.listen(source, 10, 3)
+            # r.adjust_for_ambient_noise(source)
+           
+            
+
+            #audiofile = sr.AudioFile("./rec.wav")
+  
+            #audio = r.listen(source, 10, 3)
+            
+            #with audiofile as source:
+            #    audio = r.record(source)
+
+            #with open("rec.wav", "wb") as file:
+            #    file.write(audio.frame_data)
+
             text = ""
 
-            try:
+            # try:
                 # Recognize the speech input using Google Speech Recognition
-                text = r.recognize_google(audio)
+                # text = r.recognize_google(audio)
 
-            except sr.UnknownValueError:
-                print("Google Speech Recognition could not understand audio")
+            # except sr.UnknownValueError:
+            #    print("Google Speech Recognition could not understand audio")
 
 
-            except sr.RequestError as e:
-                print("Could not request results from Google Speech Recognition service; {0}".format(e))
+            # except sr.RequestError as e:
+            #    print("Could not request results from Google Speech Recognition service; {0}".format(e))
+
+            text = recoSpeech(listenSpeech())
+
 
             if(text):
                 print("I heard: " + text)
@@ -327,8 +323,6 @@ def wait_for_wake_word(r):
                 for phrase in wake_phrases:
                     if phrase.lower() in text.strip().lower():
                         print(f"Wake phrase detected!")
-
-                        arduino_serial.sendToArduino("speaking")
                         playsound(greeting)  # Play the greeting sound
                         return
 
@@ -355,12 +349,151 @@ def chatony():
             traceback.print_exc(file=sys.stdout)
         time.sleep(1)
 
+
+
+FORMAT = pyaudio.paInt16
+CHANNELS = 1
+RATE = 44100
+CHUNK = 512
+RECORD_SECONDS = 5
+WAVE_OUTPUT_FILENAME = "recordedFile.wav"
+device_index = 6
+
+#define the silence threshold
+THRESHOLD = 350
+SILENCE_LIMIT = 2 # 2 seconds of silence will stop the recording
+
+
+AUDIO_FILE = "temp_reco.wav"
+
+
+
+def listenSpeech():
+
+    audio = pyaudio.PyAudio()
+
+    print("Im still alive")
+    stream = audio.open(format=FORMAT, channels=CHANNELS,
+                rate=RATE, input=True,
+                # input_device_index = device_index,
+                frames_per_buffer=CHUNK)
+
+
+    samples = []
+
+    chunks_per_second = RATE / CHUNK
+
+    silence_buffer = deque(maxlen=int(SILENCE_LIMIT * chunks_per_second))
+    samples_buffer = deque(maxlen=int(SILENCE_LIMIT * RATE))
+
+    started = False
+
+
+### this is for a fixed amount of recording seconds
+#    for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+#        data = stream.read(CHUNK)
+#        samples.append(data)
+
+
+
+
+### this is for continuous recording, until silence is reached
+
+
+    run = 1
+
+    while(run):
+        data = stream.read(CHUNK)
+        silence_buffer.append(abs(audioop.avg(data, 2)))
+
+        samples_buffer.extend(data)
+
+        if (True in [x > THRESHOLD for x in silence_buffer]):
+            if(not started):
+                print ("recording started")
+                started = True
+ #               samples.extend(data)
+                samples_buffer.clear()
+
+ #           else:
+ #               samples.extend(data)
+
+ #           for x in data:
+ #            print(data)
+            samples.append(data)
+
+        elif(started == True):
+            print ("recording stopped")
+            stream.stop_stream()
+
+        #    hmm = random.choice(acknowledgements)
+        #    playsound(hmm);
+
+            recwavfile(samples, audio)
+
+            #reset all vars
+            started = False
+            silence_buffer.clear()
+            samples = []
+
+            run = 0
+
+
+    stream.close()
+    audio.terminate()
+
+    return AUDIO_FILE;
+
+
+def recwavfile(data, audio):
+
+#    print(data)
+    wf = wave.open(AUDIO_FILE, 'wb')
+    wf.setnchannels(CHANNELS)
+    wf.setsampwidth(audio.get_sample_size(FORMAT))
+    wf.setframerate(RATE)
+    wf.writeframes(b''.join(data))
+    wf.close()
+
+
+
+def recoSpeech(filename):
+    with sr.AudioFile(filename) as source:
+
+        r = sr.Recognizer()
+        r.energy_threshold = 50
+        r.dynamic_energy_threshold = False
+
+        audio = r.record(source)
+        usertext = "";
+
+        try:
+            usertext = r.recognize_google(audio)
+
+        except sr.UnknownValueError:
+            print("Google Speech Recognition could not understand audio")
+
+        except sr.RequestError as e:
+            print("Could not request results from Google Speech Recognition service; {0}".format(e))
+
+
+        return usertext
+
+
+
+
+
+
 if __name__ == "__main__":
+
     playsound("global/media/cleanse.mp3", block=False)
     timestamp = str(int(time.time()))
     print(timestamp)
+    
     r = sr.Recognizer()  # Initialize r here
+    
     #check if there is an argument
+    
     if len(sys.argv) > 1:
         filename = sys.argv[1]
         # Read the text from the input file
@@ -368,6 +501,7 @@ if __name__ == "__main__":
             text = f.read()
             speaktext(text)
     else:
+    
         wait_for_wake_word(r)
         get_mode_data()
         announce_session()

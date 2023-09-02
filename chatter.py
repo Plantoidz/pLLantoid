@@ -22,7 +22,7 @@ from embodiment import get_device_with_max_channels, get_mode_data, load_charact
 #TODO: better debugging modes where we can pass values through CLI
 if __name__ == "__main__":
     # poke_network_once()
-    playsound("global/media/cleanse.mp3", block=False)
+    # playsound("global/media/cleanse.mp3", block=False)
     time.sleep(5)
     r = sr.Recognizer()
     # wait_for_wake_word(r)

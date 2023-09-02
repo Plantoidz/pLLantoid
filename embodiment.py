@@ -26,6 +26,8 @@ from pydub.playback import play
 from pydub.generators import Sine
 from io import BytesIO
 
+import TonySpeech
+
 # TODO — time it
 
 chatter_finished_event = threading.Event()
@@ -182,20 +184,22 @@ def activate_chatter(r):
     ambient = random.choice(ambient_sounds)
     greeting = random.choice(greeting_sounds)
 
-    with sr.Microphone() as source:
-        MAX_RETRIES = 3
-        retry_count = 0
-        while retry_count < MAX_RETRIES:
-            # SEND TO ARDUINO: listening
-            print("\n\nI'm listening...")
+    # with sr.Microphone() as source:
+    MAX_RETRIES = 3
+    retry_count = 0
+    while retry_count < MAX_RETRIES:
+        	# SEND TO ARDUINO: listening
+		print("\n\nI'm listening...")
             
-            try:
-                audio = r.listen(source, 100, 10)  # Capture new audio
-                text = r.recognize_google(audio)  # Try to recognize it
-                with open(f"working/{current_mode}/recordings/{timestamp}_recording.wav", "wb") as f:
-                    f.write(audio.get_wav_data())
+    #        try:
+    #            audio = r.listen(source, 100, 10)  # Capture new audio
+    #            text = r.recognize_google(audio)  # Try to recognize it
+    #            with open(f"working/{current_mode}/recordings/{timestamp}_recording.wav", "wb") as f:
+    #                f.write(audio.get_wav_data())
 
-                print("\n\nI heard: " + text)
+
+		TonySpeech.recoSppech(TonySpeech.listenSpeech())
+		print("\n\nI heard: " + text)
 
                 # Record the transcript with a timestamp
                 with open(f"working/{current_mode}/recordings/{timestamp}_recording.txt", "w") as f:
@@ -210,18 +214,19 @@ def activate_chatter(r):
                 
                 break  # If everything is successful, break out of the loop
 
-            except sr.UnknownValueError:
-                print("Google Speech Recognition could not understand audio")
-                playsound(fail)
-                retry_count += 1  # Increment the retry count
+    #        except sr.UnknownValueError:
+    #            print("Google Speech Recognition could not understand audio")
+    #            playsound(fail)
+    #            retry_count += 1  # Increment the retry count
 
-            except sr.RequestError as e:
-                print("\n\nCould not request results from Google Speech Recognition service; {0}".format(e))
-                playsound(problem)
-                retry_count += 1  # Increment the retry count
+    #        except sr.RequestError as e:
+    #            print("\n\nCould not request results from Google Speech Recognition service; {0}".format(e))
+    #            playsound(problem)
+    #            retry_count += 1  # Increment the retry count
 
-        if retry_count == MAX_RETRIES:
-            print("Max retries reached. Exiting.")
+        	
+		if retry_count == MAX_RETRIES:
+            		print("Max retries reached. Exiting.")
     
     chatter_finished_event.set()
 

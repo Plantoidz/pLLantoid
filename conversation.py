@@ -25,7 +25,7 @@ from nltk.probability import FreqDist
 import speech_recognition as sr
 import subprocess
 import threading
-from scipy.io import wavfile
+# from scipy.io import wavfile
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Lock
 import episode_manager
@@ -286,8 +286,12 @@ def wait_for_wake_word(r):
 
             print("I'm listening...")
             # Listen for speech and store it as audio data
-            r.adjust_for_ambient_noise(source)
+            # r.adjust_for_ambient_noise(source)
             audio = r.listen(source, 10, 3)
+            
+            with open("rec.wav", "wb") as file:
+		file.write(audio.frame_data)
+
             text = ""
 
             try:
